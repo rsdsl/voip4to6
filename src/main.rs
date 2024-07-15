@@ -111,10 +111,6 @@ mod proxy {
             Ok(())
         }
 
-        pub fn addr(&self) -> IpAddr {
-            self.addr
-        }
-
         pub fn socket_addr(&self, port: Port) -> SocketAddr {
             SocketAddr::new(self.addr, port)
         }
@@ -134,14 +130,14 @@ mod proxy {
 
             if src == internal {
                 socket.send_to(
-                    &data,
+                    data,
                     external
                         .try_read()
                         .map_err(|_| Error::LockMutex)?
                         .socket_addr(port),
                 )?;
             } else {
-                socket.send_to(&data, internal)?;
+                socket.send_to(data, internal)?;
             }
         }
     }
